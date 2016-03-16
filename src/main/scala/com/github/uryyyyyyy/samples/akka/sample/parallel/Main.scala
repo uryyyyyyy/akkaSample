@@ -1,5 +1,7 @@
 package com.github.uryyyyyyy.samples.akka.sample.parallel
 
+import java.util.concurrent.TimeUnit
+
 import akka.actor.{ActorSystem, Props}
 import akka.pattern.ask
 import akka.util.Timeout
@@ -25,7 +27,7 @@ object Main {
 	}
 
 	def actorMode(list:Seq[Int]) :Unit = {
-		val timeout = Timeout.intToTimeout(1000)
+		val timeout = Timeout(5000, TimeUnit.MILLISECONDS)
 		val system = ActorSystem()
 		printExecutionTime{
 			val futureList = list.map(v => {
