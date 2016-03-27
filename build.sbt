@@ -35,3 +35,6 @@ lazy val faultTolerance = (project in file("faultTolerance")).
 
 lazy val persistence_helloWorld = (project in file("persistence_helloWorld")).
 		settings(commonSettings: _*)
+
+lazy val camel_helloWorld = (project in file("camel_helloWorld")).
+		settings(commonSettings: _*)
