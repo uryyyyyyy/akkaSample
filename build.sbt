@@ -2,7 +2,7 @@ name := """akkaSamples"""
 
 version := "1.0"
 
-lazy val akkaVersion = "2.4.1"
+lazy val akkaVersion = "2.4.2"
 
 lazy val commonSettings = Seq(
 	organization := "com.github.uryyyyyyy",
