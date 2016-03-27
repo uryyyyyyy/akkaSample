@@ -10,7 +10,7 @@ lazy val commonSettings = Seq(
 	libraryDependencies ++= Seq(
 		"com.typesafe.akka" %% "akka-actor" % akkaVersion,
 		"com.typesafe.akka" %% "akka-testkit" % akkaVersion % "test",
-		"org.scalatest" %% "scalatest" % "2.2.4" % "test"
+		"org.scalatest" %% "scalatest" % "3.0.0-M15" % "test"
 	)
 )
 
