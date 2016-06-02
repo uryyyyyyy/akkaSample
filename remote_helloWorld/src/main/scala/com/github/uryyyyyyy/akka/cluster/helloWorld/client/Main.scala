@@ -2,7 +2,7 @@ package com.github.uryyyyyyy.akka.cluster.helloWorld.client
 
 import akka.actor.ActorSystem
 import akka.cluster.client.{ClusterClientSettings, ClusterClient}
-import com.github.uryyyyyyy.akka.cluster.common.Massages.Hello
+import com.github.uryyyyyyy.akka.cluster.helloWorld.common.Massages.Hello
 import com.typesafe.config.ConfigFactory
 
 import scala.collection.JavaConversions._
