@@ -1,4 +1,4 @@
-package com.github.uryyyyyyy.akka.faultTolerance
+package com.github.uryyyyyyy.akka.helloworld.faultTolerance
 
 import java.io.IOException
 
