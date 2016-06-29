@@ -3,9 +3,9 @@ package com.github.uryyyyyyy.akka.stream.helloworld
 import akka.actor.ActorSystem
 import akka.stream._
 import akka.stream.scaladsl._
+import akka.{Done, NotUsed}
 
-import scala.concurrent.Await
-import scala.concurrent.duration._
+import scala.concurrent.Future
 
 object Start2 {
 
@@ -15,16 +15,16 @@ object Start2 {
 		import GraphDSL.Implicits._
 
 		implicit val materializer = ActorMaterializer()
-		val source = Source(List(1, 2, 3))
-		val sink = Flow[Int].limit(10).toMat(Sink.seq)(Keep.right)
-		val step1 = Flow[Int].map(_ * 2)
+		val source: Source[Int, NotUsed] = Source(List(1, 2, 3))
+		val sink: Sink[String, Future[Done]] = Sink.foreach[String](println)
+		val flow1: Flow[Int, Int, NotUsed] = Flow[Int].map(_ * 2)
+		val flow2: Flow[Int, String, NotUsed] = Flow[Int].map(_.toString + " haha").limit(10)
 
-		val g = RunnableGraph.fromGraph(GraphDSL.create(sink) { implicit b =>
-			s =>
-				source ~> step1 ~> s.in
+		val g = RunnableGraph.fromGraph(GraphDSL.create() { implicit builder: GraphDSL.Builder[NotUsed] =>
+				source ~> flow1 ~> flow2 ~> sink
 				ClosedShape
 		})
-		val result = Await.result(g.run(), 1.second)
+		val result = g.run()
 		println(result)
 		system.terminate()
 	}

@@ -6,7 +6,7 @@ lazy val akkaVersion = "2.4.7"
 
 lazy val commonSettings = Seq(
   organization := "com.github.uryyyyyyy",
-  scalaVersion := "2.11.7",
+  scalaVersion := "2.11.8",
   libraryDependencies ++= Seq(
     "com.typesafe.akka" %% "akka-actor" % akkaVersion,
     "org.scalaz" %% "scalaz-core" % "7.2.4",

@@ -13,12 +13,12 @@ object Start {
 		implicit val system = ActorSystem()
 		implicit val mat = ActorMaterializer()
 
-		val source = Source[Int](1 to 5) // Publisherのこと
-		val sink = Sink.foreach[Int](println) // Subscriberのこと
+		val source = Source[Int](1 to 5)
+		val sink = Sink.foreach[String](println)
 
 		val f = source
-				.map(_ * 2) // Stageのこと（このstep一つ一つでActorが立ち上がる）
-				.runWith(sink) // Sinkで結果を受け取る
+				.map(_.toString)
+				.runWith(sink)
 
 		Await.result(f, Duration.Inf)
 		system.terminate()
