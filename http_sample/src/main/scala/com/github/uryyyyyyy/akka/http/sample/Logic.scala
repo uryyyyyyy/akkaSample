@@ -6,17 +6,16 @@ import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.RouteResult.Complete
 import akka.http.scaladsl.server._
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContextExecutor, Future}
 
 object Logic {
 
   val validateCustomHeader: Directive1[String] = {
     val value = headerValueByName("customHeaderKey")
-    value.filter(_ == "customHeaderValue")
+    value.filter(_ == "customHeaderValue", MalformedHeaderRejection("customHeaderKey", "value was wrong"))
   }
 
-  def execute(num: Int)(implicit req: RequestContext): Future[RouteResult] = {
+  def execute(num: Int, req: RequestContext)(implicit ec: ExecutionContextExecutor): Future[RouteResult] = {
     Future{
       println(req.request.headers.mkString(","))
       val header1 = `Set-Cookie`(HttpCookie("key", "value"))

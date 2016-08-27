@@ -22,7 +22,7 @@ object Main {
       pathPrefix("api") {
         path("execute" / IntNumber) { num =>
           Logic.validateCustomHeader{ _ =>
-            req => Logic.execute(num)(req)
+            req => Logic.execute(num, req)
           }
         }
       }
