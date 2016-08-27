@@ -1,27 +1,27 @@
 package com.github.uryyyyyyy.akka.http.sample.chat
 
 import akka.actor._
+import com.github.uryyyyyyy.akka.http.sample.chat.ChatRoom.ChatMessage
 
 object ChatRoom {
   case class Join(user: String)
   case class ChatMessage(user: String, message: String)
 }
 
-class ChatRoom extends Actor {
-  import ChatRoom._
+class ChatRoom {
   var users: Map[String, ActorRef] = Map.empty
 
-  def receive = {
-    case Join(u) =>
-      users += (u -> sender())
-      // we also would like to remove the user when its actor is stopped
-      context.watch(sender())
+  def Join(u: String, a: ActorRef) = {
+    users += (u -> a)
+  }
 
-    case Terminated(user) =>
-      val target = users.find(_._2 == user).get
-      users -= target._1
+  def terminated(user:ActorRef) = {
+    val target = users.find(_._2 == user).get
+    users -= target._1
+    users.foreach(_._2 ! new ChatMessage(target._1, "see you"))
+  }
 
-    case msg: ChatMessage =>
+  def msg(msg: ChatMessage) = {
       users.foreach(_._2 ! msg)
   }
 }

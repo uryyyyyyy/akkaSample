@@ -2,7 +2,7 @@ name := """akkaSamples"""
 
 version := "1.0"
 
-lazy val akkaVersion = "2.4.7"
+lazy val akkaVersion = "2.4.9"
 
 lazy val commonSettings = Seq(
   organization := "com.github.uryyyyyyy",
@@ -11,7 +11,7 @@ lazy val commonSettings = Seq(
     "com.typesafe.akka" %% "akka-actor" % akkaVersion,
     "org.scalaz" %% "scalaz-core" % "7.2.4",
     "com.typesafe.akka" %% "akka-testkit" % akkaVersion % "test",
-    "org.scalatest" %% "scalatest" % "3.0.0-M15" % "test"
+    "org.scalatest" %% "scalatest" % "3.0.0" % "test"
   )
 )
 
@@ -39,6 +39,7 @@ lazy val http_sample = (project in file("http_sample"))
     name := """akka-http_sample""",
     libraryDependencies ++= Seq(
       "com.typesafe.akka" %% "akka-http-core" % akkaVersion,
+      "com.typesafe.akka" %% "akka-http-experimental" % akkaVersion,
       "com.typesafe.akka" %% "akka-http-testkit" % akkaVersion,
       "com.typesafe.akka" %% "akka-http-spray-json-experimental" % akkaVersion,
       "com.typesafe.akka" %% "akka-http-jackson-experimental" % akkaVersion
@@ -76,6 +77,3 @@ lazy val camel_sample = (project in file("camel_sample"))
       "org.apache.camel" % "camel-quartz" % "2.10.3"
     )
   )
-
-
-//"com.typesafe.akka" %% "akka-typed-experimental" % "2.4.7"

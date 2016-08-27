@@ -17,7 +17,7 @@ object Main {
     implicit val system = ActorSystem()
     implicit val materializer = ActorMaterializer()
 
-    val chatRoom = system.actorOf(Props(new ChatRoom), "chat")
+    val chatRoom = new ChatRoom
 
     def newUser(user: String): Flow[Message, Message, NotUsed] = {
       // new connection - new user actor
@@ -27,7 +27,7 @@ object Main {
         Flow[Message].map {
           // transform websocket message to domain message
           case TextMessage.Strict(text) => User.IncomingMessage(text)
-        }.to(Sink.actorRef[User.IncomingMessage](userActor, PoisonPill))
+        }.to(Sink.actorRef[User.IncomingMessage](userActor, chatRoom.terminated(userActor)))
 
       val outgoingMessages: Source[Message, NotUsed] =
         Source.actorRef[User.OutgoingMessage](10, OverflowStrategy.fail)

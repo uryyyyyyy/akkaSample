@@ -8,7 +8,7 @@ object User {
   case class OutgoingMessage(user: String, text: String)
 }
 
-class User(chatRoom: ActorRef, user: String) extends Actor {
+class User(chatRoom: ChatRoom, user: String) extends Actor {
   import User._
 
   def receive = {
@@ -17,14 +17,14 @@ class User(chatRoom: ActorRef, user: String) extends Actor {
   }
 
   def connected(outgoing: ActorRef): Receive = {
-    chatRoom ! ChatRoom.Join(user)
+    chatRoom.Join(user, self)
 
     {
       case IncomingMessage(text) =>
-        chatRoom ! ChatRoom.ChatMessage(user, text)
+        chatRoom.msg(ChatRoom.ChatMessage(user, text))
 
-      case ChatRoom.ChatMessage(user, text) =>
-        outgoing ! OutgoingMessage(user, text)
+      case ChatRoom.ChatMessage(user2, text) =>
+        outgoing ! OutgoingMessage(user2, text)
     }
   }
 
