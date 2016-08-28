@@ -2,13 +2,17 @@ package com.github.uryyyyyyy.akka.http.sample
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
+import akka.http.scaladsl.model.headers.HttpCookie
 import akka.http.scaladsl.server.Directives._
 import akka.stream.ActorMaterializer
 
 import scala.concurrent.Future
+import scala.util.Random
 
 object Main {
   def main(args: Array[String]): Unit = {
+
+    val random = new Random()
 
     val port = if(args.length == 0) 8080 else args(0).toInt
 
@@ -21,16 +25,33 @@ object Main {
         complete("ok")
       }
     } ~ get {
-      path("cookie.html") {
-        getFromResource("cookie.html")
+      path("3rd_party_tracking.html") {
+        getFromResource("3rd_party_tracking.html")
+      } ~ path("1st_party_tracking.html") {
+        getFromResource("1st_party_tracking.html")
       } ~ path("1stPartyTracking.js") {
         getFromResource("1stPartyTracking.js")
+      }~ path("3rdPartyTracking.img") {
+        optionalCookie("3rdPartyTrackingKey"){ pair =>
+          val trackingID = if (pair.isEmpty){
+            val id = random.nextDouble().toString
+            println("3rd party cookie. new user: " + id)
+            id
+          }else{
+            val id = pair.get.value
+            println("3rd party cookie. same user: " + id)
+            id
+          }
+          setCookie(HttpCookie("3rdPartyTrackingKey", trackingID)){
+            getFromResource("tracking.png")
+          }
+        }
       }
-    } ~ post {
+    } ~ get {
       path("tracking") {
-        formFields('trackingID) { trackingID =>
-          println(trackingID)
-          complete("tracked")
+        parameter('trackingID) { trackingID =>
+          println("1st party cookie" + trackingID)
+          getFromResource("tracking.png")
         }
       }
     } ~ get {

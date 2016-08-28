@@ -8,11 +8,6 @@ if(!trackingID){
     trackingID = randomNumber;
 }
 
-$.ajax({
-    type: "POST",
-    url: "http://localhost:9999/tracking",
-    data: "trackingID=" + trackingID,
-    success: function(msg){
-        alert( "Data Saved: " + msg );
-    }
-});
+var url = "http://localhost:9999/tracking?trackingID=" + trackingID;
+
+$("body").append('<img src=' + url + '>');
