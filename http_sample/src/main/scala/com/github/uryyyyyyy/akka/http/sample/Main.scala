@@ -10,6 +10,8 @@ import scala.concurrent.Future
 object Main {
   def main(args: Array[String]): Unit = {
 
+    val port = if(args.length == 0) 8080 else args(0).toInt
+
     implicit val system = ActorSystem()
     implicit val materializer = ActorMaterializer()
     implicit val ec = system.dispatcher
@@ -17,6 +19,19 @@ object Main {
     val route = path("") {
       get {
         complete("ok")
+      }
+    } ~ get {
+      path("cookie.html") {
+        getFromResource("cookie.html")
+      } ~ path("1stPartyTracking.js") {
+        getFromResource("1stPartyTracking.js")
+      }
+    } ~ post {
+      path("tracking") {
+        formFields('trackingID) { trackingID =>
+          println(trackingID)
+          complete("tracked")
+        }
       }
     } ~ get {
       pathPrefix("api") {
@@ -28,9 +43,9 @@ object Main {
       }
     }
 
-    val bindingFuture: Future[Http.ServerBinding] = Http().bindAndHandle(route, "127.0.0.1", 8080)
+    val bindingFuture: Future[Http.ServerBinding] = Http().bindAndHandle(route, "127.0.0.1", port)
 
-    println("Server online at http://127.0.0.1:8080/\nPress RETURN to stop...")
+    println(s"Server online at http://127.0.0.1:${port}/\nPress RETURN to stop...")
     scala.io.StdIn.readLine()
 
     bindingFuture
