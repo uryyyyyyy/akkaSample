@@ -64,7 +64,7 @@ object Main {
       }
     }
 
-    val bindingFuture: Future[Http.ServerBinding] = Http().bindAndHandle(route, "127.0.0.1", port)
+    val bindingFuture: Future[Http.ServerBinding] = Http().bindAndHandle(route, "0.0.0.0", port)
 
     println(s"Server online at http://127.0.0.1:${port}/\nPress RETURN to stop...")
     scala.io.StdIn.readLine()
